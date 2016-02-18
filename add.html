@@ -24,6 +24,9 @@
 			var tags = document.getElementById('tag').value
 			var tag = tags.split(" ")
 			socket.emit('additem', title, descr, tag)
+			document.getElementById('title').value = ''
+			document.getElementById('description').value = ''
+			document.getElementById('tag').value = ''
 		})
 		document.getElementById('back').addEventListener('click', function(){
 			window.location='http://localhost:7122'

@@ -6,7 +6,7 @@
 <body>
 	<input type="button" value="show all" id="show">
 	<input type="button" value="add new" id="new">
-	<div id="appe"></div>
+	<div id="appe0"></div>
 </body>
 </html>
 
@@ -14,8 +14,10 @@
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	var socket = io('http://localhost:7122');
+	var count = 0
 	window.addEventListener('load',function(){
 		document.getElementById('show').addEventListener('click', function(){
+			$('#count'+count).remove()
 			socket.emit('reqall')
 		})
 		document.getElementById('new').addEventListener('click', function(){
@@ -23,7 +25,6 @@
 		})
 	})
 	socket.on('allisthis',function(come){
-		$('#appe').append('<p>'+come+'<p>')
-	//	$('#appe').append('<p>'+db.toString()+'<p>')
+			$('#appe0').append('<p id="count'+count+'">'+come+'<p>')
 	})
 </script>
