@@ -5,6 +5,7 @@
 </head>
 <body>
 	<input type="button" value="show all" id="show">
+	<input type="button" value="add new" id="new">
 	<div id="appe"></div>
 </body>
 </html>
@@ -14,11 +15,15 @@
 <script type="text/javascript">
 	var socket = io('http://localhost:7122');
 	window.addEventListener('load',function(){
-		document.getElementById('show').addEventListener('click',function(){
-			socket.emit('reqall');
+		document.getElementById('show').addEventListener('click', function(){
+			socket.emit('reqall')
+		})
+		document.getElementById('new').addEventListener('click', function(){
+			window.location='http://localhost:7122/add.html'
 		})
 	})
-	socket.on('allisthis',function(db){
-		$('#appe').append('<p>'+JSON.stringify(db)+'<p>');
+	socket.on('allisthis',function(come){
+		$('#appe').append('<p>'+come+'<p>')
+	//	$('#appe').append('<p>'+db.toString()+'<p>')
 	})
 </script>

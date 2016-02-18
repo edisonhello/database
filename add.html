@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>View</title>
+</head>
+<body>
+	title: <input type="text" id="title"><br>
+	description: <input type="text" id="description" style="height:100px"><br>
+	tags: <input type="tags"id="tag"><br>
+	<input type="button" value="add" id="add">
+	<input type="button" value="back to home" id="back">
+</body>
+</html>
+
+<script src="/static/jQuery/jquery-2.1.4.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+	var socket = io('http://localhost:7122');
+
+	window.addEventListener('load',function(){
+		document.getElementById('add').addEventListener('click', function(){
+			var title = document.getElementById('title').value
+			var descr = document.getElementById('description').value
+			var tags = document.getElementById('tag').value
+			var tag = tags.split(" ")
+			socket.emit('additem', title, descr, tag)
+		})
+		document.getElementById('back').addEventListener('click', function(){
+			window.location='http://localhost:7122'
+		})
+	})
+</script>
