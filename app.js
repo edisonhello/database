@@ -34,6 +34,7 @@ io.sockets.on('connection', function(socket){
 					str[str.length-1] = str[str.length-1].slice(0,str[str.length-1].length-2)
 					str = str.toString()
 					str = str.replace(/","_/g,'"<br>"_')
+					str = str.replace(/],"_/g,']<br>"_')
 					console.log(str);
 					socket.emit('allisthis', str);
 				})
