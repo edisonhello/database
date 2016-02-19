@@ -49,6 +49,13 @@ setInterval(function(){
 //	console.log(now)
 }, 1000)
 
+var count;
+MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
+	db.collection('datbs').find({}).count(function(err,cnt){
+		count = cnt;
+	})
+})
+
 io.sockets.on('connection', function(socket){
 	socket.on('reqall', function(){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
@@ -59,9 +66,8 @@ io.sockets.on('connection', function(socket){
 					str[0] = str[0].slice(2);
 					str[str.length-1] = str[str.length-1].slice(0,str[str.length-1].length-2);
 					str = str.toString();
-					str = str.replace(/],"t/g,']<br>"t');
-				//	str = str.replace(/],"_/g,']<br>"_');
-					console.log(str);
+					str = str.replace(/],"i/g,']<br>"i');
+//					console.log(str);
 					socket.emit('allisthis', str);
 				})
 			})
@@ -70,29 +76,28 @@ io.sockets.on('connection', function(socket){
 
 	socket.on('additem', function(title, descr, tag){
 		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
-			db.collection('datbs').insert({"time": now, "title": title, "descr": descr, "tag": tag});
+			count++;
+			db.collection('datbs').insert({"id": count, "time": now, "title": title, "descr": descr, "tag": tag});
 		})
 	})
 
 	socket.on('findreq', function(findType, findThing){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
 			if(findType == "title"){
-				db.collection('datbs').find({"title":findThing}, function(err,result){
+				db.collection('datbs').find({"title":findThing},{_id: 0}, function(err,result){
 					result.toArray(function(err, callback){
-						console.log(callback)
-						var str = JSON.stringify(callback);
+						var str = JSON.stringify(callback)
 						str = str.split("},{");
 						str[0] = str[0].slice(2);
 						str[str.length-1] = str[str.length-1].slice(0,str[str.length-1].length-2);
 						str = str.toString();
-						str = str.replace(/","_/g,'"<br>"_');
-						str = str.replace(/],"_/g,']<br>"_');
+						str = str.replace(/],"i/g,']<br>"i');
 						socket.emit('allisthis', str);
 					})
 				})
 			}
 			if(findType == "tag"){
-				db.collection('datbs').find({"tag":findThing}, function(err,result){
+				db.collection('datbs').find({"tag":findThing},{_id: 0}, function(err,result){
 					result.toArray(function(err, callback){
 						console.log(callback)
 						var str = JSON.stringify(callback);
@@ -100,8 +105,7 @@ io.sockets.on('connection', function(socket){
 						str[0] = str[0].slice(2);
 						str[str.length-1] = str[str.length-1].slice(0,str[str.length-1].length-2);
 						str = str.toString();
-						str = str.replace(/","_/g,'"<br>"_');
-						str = str.replace(/],"_/g,']<br>"_');
+						str = str.replace(/],"i/g,']<br>"');
 						socket.emit('allisthis', str);
 					})
 				})

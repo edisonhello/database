@@ -12,12 +12,14 @@
 		<option value="tag">tag</option>
 	</select>
 	<input type="button" value="find" id="find">
+	<input type="button" value="edit" id="edit">
 	<div id="appe0"></div>
 </body>
 </html>
 
 <script src="/static/jQuery/jquery-2.1.4.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/static/jQuery/url.min.js"></script>
 <script type="text/javascript">
 	var socket = io('http://localhost:7122');
 	var count = 0
@@ -27,20 +29,31 @@
 			socket.emit('reqall')
 		})
 		document.getElementById('new').addEventListener('click', function(){
-			window.location='http://localhost:7122/add.html'
+			window.location = 'http://localhost:7122/add.html'
 		})
 		document.getElementById('find').addEventListener('click', function(){
 			var findThing = document.getElementById('findIndex').value
+			var findType = document.getElementById('select').value
+			var doFind = true
 			if(findThing == ''){
 				alert('nothing to find!')
+				doFind = false
 			}
-			var findType = document.getElementById('select').value
-			$('#count'+count).remove()
-			console.log(findType+","+findThing)
-			socket.emit('findreq', findType, findThing)
+			else{
+				$('#count'+count).remove()
+				console.log(findType+","+findThing)
+				socket.emit('findreq', findType, findThing)
+			}
+		})
+		document.getElementById('edit').addEventListener('click', function(){
+			window.location = 'http://localhost:7122/edit.html'
 		})
 	})
 	socket.on('allisthis',function(come){
 			$('#appe0').append('<p id="count'+count+'">'+come+'<p>')
+			/*for(var loop=0; loop<come.length; loop++){
+				$('#appe0').append('<p id="count'+count+'">'+come[loop]+'<p>')
+
+			}*/
 	})
 </script>
