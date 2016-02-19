@@ -31,6 +31,9 @@
 		})
 		document.getElementById('find').addEventListener('click', function(){
 			var findThing = document.getElementById('findIndex').value
+			if(findThing == ''){
+				alert('nothing to find!')
+			}
 			var findType = document.getElementById('select').value
 			$('#count'+count).remove()
 			console.log(findType+","+findThing)

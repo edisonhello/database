@@ -46,21 +46,21 @@ setInterval(function(){
 	else{
 		now=now+new Date().getSeconds().toString();
 	}
-	console.log(now)
+//	console.log(now)
 }, 1000)
 
 io.sockets.on('connection', function(socket){
 	socket.on('reqall', function(){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
-			db.collection('datbs').find({}/*,{_id: 0}*/, function(err,result){
+			db.collection('datbs').find({},{_id: 0}, function(err,result){
 				result.toArray(function(err, callback){
 					var str = JSON.stringify(callback);
 					str = str.split("},{");
 					str[0] = str[0].slice(2);
 					str[str.length-1] = str[str.length-1].slice(0,str[str.length-1].length-2);
 					str = str.toString();
-					str = str.replace(/","_/g,'"<br>"_');
-					str = str.replace(/],"_/g,']<br>"_');
+					str = str.replace(/],"t/g,']<br>"t');
+				//	str = str.replace(/],"_/g,']<br>"_');
 					console.log(str);
 					socket.emit('allisthis', str);
 				})
