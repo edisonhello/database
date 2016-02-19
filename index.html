@@ -6,6 +6,12 @@
 <body>
 	<input type="button" value="show all" id="show">
 	<input type="button" value="add new" id="new">
+	<input type="text" value="" id="findIndex">
+	<select name="type" id="select">
+		<option value="title">title</option>
+		<option value="tag">tag</option>
+	</select>
+	<input type="button" value="find" id="find">
 	<div id="appe0"></div>
 </body>
 </html>
@@ -22,6 +28,13 @@
 		})
 		document.getElementById('new').addEventListener('click', function(){
 			window.location='http://localhost:7122/add.html'
+		})
+		document.getElementById('find').addEventListener('click', function(){
+			var findThing = document.getElementById('findIndex').value
+			var findType = document.getElementById('select').value
+			$('#count'+count).remove()
+			console.log(findType+","+findThing)
+			socket.emit('findreq', findType, findThing)
 		})
 	})
 	socket.on('allisthis',function(come){

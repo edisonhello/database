@@ -51,8 +51,8 @@ setInterval(function(){
 
 io.sockets.on('connection', function(socket){
 	socket.on('reqall', function(){
-		MongoClient.connect('mongodb://localhost:27017/datbs',function(err, db){
-			db.collection('datbs').find({}/*,{_id: 0}*/,function(err,result){
+		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
+			db.collection('datbs').find({}/*,{_id: 0}*/, function(err,result){
 				result.toArray(function(err, callback){
 					var str = JSON.stringify(callback);
 					str = str.split("},{");
@@ -71,6 +71,41 @@ io.sockets.on('connection', function(socket){
 	socket.on('additem', function(title, descr, tag){
 		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
 			db.collection('datbs').insert({"time": now, "title": title, "descr": descr, "tag": tag});
+		})
+	})
+
+	socket.on('findreq', function(findType, findThing){
+		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
+			if(findType == "title"){
+				db.collection('datbs').find({"title":findThing}, function(err,result){
+					result.toArray(function(err, callback){
+						console.log(callback)
+						var str = JSON.stringify(callback);
+						str = str.split("},{");
+						str[0] = str[0].slice(2);
+						str[str.length-1] = str[str.length-1].slice(0,str[str.length-1].length-2);
+						str = str.toString();
+						str = str.replace(/","_/g,'"<br>"_');
+						str = str.replace(/],"_/g,']<br>"_');
+						socket.emit('allisthis', str);
+					})
+				})
+			}
+			if(findType == "tag"){
+				db.collection('datbs').find({"tag":findThing}, function(err,result){
+					result.toArray(function(err, callback){
+						console.log(callback)
+						var str = JSON.stringify(callback);
+						str = str.split("},{");
+						str[0] = str[0].slice(2);
+						str[str.length-1] = str[str.length-1].slice(0,str[str.length-1].length-2);
+						str = str.toString();
+						str = str.replace(/","_/g,'"<br>"_');
+						str = str.replace(/],"_/g,']<br>"_');
+						socket.emit('allisthis', str);
+					})
+				})
+			}
 		})
 	})
 })
