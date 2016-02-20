@@ -80,7 +80,6 @@ io.sockets.on('connection', function(socket){
 	socket.on('additem', function(title, descr, tag){
 		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
 			count++;
-			console.log("321ads321ads321asd");
 			db.collection('datbs').insert({"id": count.toString(), "time": now, "title": title, "descr": descr, "tag": tag});
 		})
 	})
@@ -103,7 +102,6 @@ io.sockets.on('connection', function(socket){
 			if(findType == "tag"){
 				db.collection('datbs').find({"tag": findThing},{_id: 0}, function(err,result){
 					result.toArray(function(err, callback){
-						console.log(callback)
 						var str = JSON.stringify(callback);
 						str = str.split("},{");
 						str[0] = str[0].slice(2);
@@ -123,7 +121,6 @@ io.sockets.on('connection', function(socket){
 				db.collection('datbs').find({"id": id}).count(function(err, cnt){
 					if(cnt){
 						result.toArray(function(err, callback){
-							console.log(callback[0].id);
 							socket.emit('thisisdetail', callback[0].title, callback[0].descr, callback[0].tag);
 						})
 					}
@@ -138,6 +135,12 @@ io.sockets.on('connection', function(socket){
 	socket.on('updateitem', function(title, descr, tag, thisid){
 		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
 			db.collection('datbs').update({"id":thisid}, {"id": thisid, "time": now, "title": title, "descr": descr, "tag": tag});
+		})
+	})
+
+	socket.on('deletethis', function(thisid){
+		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
+			db.collection('datbs').remove({"id": thisid.toString()});
 		})
 	})
 })

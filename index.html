@@ -41,7 +41,6 @@
 			}
 			else{
 				$('#count'+count).remove()
-				console.log(findType+","+findThing)
 				socket.emit('findreq', findType, findThing)
 			}
 		})

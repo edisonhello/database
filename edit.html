@@ -49,13 +49,20 @@
 		})
 		document.getElementById('delete').addEventListener('click', function(){
 			var really = document.getElementById('deleteconfirm').checked
-			console.log(really)
+			if(really == true){
+				var deleteid = document.getElementById('getid').value
+				socket.emit('deletethis', deleteid)
+				document.getElementById('title').value = "nothing here!"
+				document.getElementById('description').value = ""
+				document.getElementById('tag').value = ""
+			}
+			else{
+				alert('really want to delete??')
+			}
 		})
 	})
 
 	socket.on('thisisdetail', function(title, descr, tagArray){
-		console.log()
-
 		var tagString = tagArray.toString()
 		tagString = tagString.replace(/,/g,' ')
 		document.getElementById('title').value = title
