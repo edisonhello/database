@@ -4,10 +4,12 @@
 	<title>View</title>
 </head>
 <body>
+	insert id to find data: <input type="text" id="getid"><br>
+
 	title: <input type="text" id="title"><br>
 	description: <input type="text" id="description" style="height:100px"><br>
 	tags: <input type="tags"id="tag"><br>
-	<input type="button" value="add" id="add">
+	<input type="button" value="update" id="update">
 	<input type="button" value="back to home" id="back">
 </body>
 </html>
@@ -18,19 +20,34 @@
 <script type="text/javascript">
 	var socket = io('http://localhost:7122')
 
+	var nowId
+
+	setInterval(function(){
+		if(nowId != document.getElementById('getid').value){
+			console.log(11)
+			nowId = document.getElementById('getid').value
+			socket.emit('thisiddetail?', nowId)
+		}
+	},100)
+
 	window.addEventListener('load',function(){
-		document.getElementById('add').addEventListener('click', function(){
+		document.getElementById('update').addEventListener('click', function(){
+			/**//**//**//**//**/
 			var title = document.getElementById('title').value
 			var descr = document.getElementById('description').value
 			var tags = document.getElementById('tag').value
 			var tag = tags.split(" ")
 			socket.emit('additem', title, descr, tag)
-			document.getElementById('title').value = ''
-			document.getElementById('description').value = ''
-			document.getElementById('tag').value = ''
 		})
 		document.getElementById('back').addEventListener('click', function(){
 			window.location='http://localhost:7122'
 		})
+	})
+
+	socket.on('thisisdetail', function(title, descr, tagArray){
+		console.log(title)
+
+		//var tagString = tagArray.toString()
+		//console.log(tagString)
 	})
 </script>

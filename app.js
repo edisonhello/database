@@ -24,6 +24,9 @@ app.get('/', function(req,res){
 app.get('/add.html', function(req,res){
 	res.sendFile(__dirname+'/add.html', function(){res.end();})
 })
+app.get('/edit.html', function(req,res){
+	res.sendFile(__dirname+'/edit.html', function(){res.end();})
+})
 
 setInterval(function(){
 	var month = new Date().getMonth()+1;
@@ -110,6 +113,18 @@ io.sockets.on('connection', function(socket){
 					})
 				})
 			}
+		})
+	})
+
+	socket.on('thisiddetail?', function(id){
+		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
+			db.collection('datbs').find({"id": idisthis}, function(err,result){
+				console.log(result)
+				result.toArray(function(err,callback){
+					console.log(callback["title"]);
+					//socket.emit('thisisdetail', callback.title, callback.descr, callback.tag);
+				})
+			})
 		})
 	})
 })
