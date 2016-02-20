@@ -4,6 +4,13 @@
 	<title>addNew</title>
 </head>
 <body>
+
+	<div id="login">
+		username : <input type="text" id="username"><br>
+		password : <input type="password" id="pass"><br>
+		<input type="button" id="login!" value="login">
+	</div>
+
 	title: <input type="text" id="title"><br>
 	description: <input type="text" id="description" style="height:100px"><br>
 	tags: <input type="tags"id="tag"><br><br>
@@ -17,6 +24,8 @@
 <script src="/static/jQuery/url.min.js"></script>
 <script type="text/javascript">
 	var socket = io('http://localhost:7122')
+
+	var logined = false
 
 	window.addEventListener('load',function(){
 		document.getElementById('add').addEventListener('click', function(){
@@ -32,5 +41,6 @@
 		document.getElementById('back').addEventListener('click', function(){
 			window.location='http://localhost:7122'
 		})
+		document.getElementById('login!').addEventListener('')
 	})
 </script>
