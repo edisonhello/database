@@ -6,12 +6,11 @@
 <body>
 
 	<div id="wrn"></div>
-	<div id="login">
-		username : <input type="text" id="username"><br>
-		password : <input type="password" id="pass"><br>
-		confirm password : <input type="password" id="passconfirm">
-		<input type="button" id="reg!" value="regist">
-	</div>
+	username : <input type="text" id="username"><br>
+	password : <input type="password" id="pass"><br>
+	confirm password : <input type="password" id="passconfirm"><br>
+	<input type="button" id="reg!" value="regist"><br>
+	<input type="button" id="gohome" value="back to home">
 </body>
 </html>
 
@@ -33,13 +32,27 @@
 			if(usernam == "" || passw == "" || pass2 == ""){
 				$('#wrn').text("please fill all blocks")
 			}
+			else if(passw != pass2){
+				$('#wrn').text("password not alike")
+			}
 			else{
 				socket.emit('regreq', usernam, passw)
 			}
 		})
+		document.getElementById('gohome').addEventListener('click', function(){
+			window.location = 'http://localhost:7122/'
+		})
 	})
 
 	socket.on('username2', function(){
-		$('#wrn').text("")////<<<-----
+		$('#wrn').text("username repeat!")
+	})
+
+	socket.on('regdone', function(){
+		$('#wrn').text("regist finish. return to homepage in 5 seconds")
+		document.getElementById('username').value = ""
+		setTimeout(function(){
+			window.location = 'http://localhost:7122/'
+		}, 5000);
 	})
 </script>

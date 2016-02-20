@@ -27,6 +27,9 @@ app.get('/add.html', function(req,res){
 app.get('/edit.html', function(req,res){
 	res.sendFile(__dirname+'/edit.html', function(){res.end();})
 })
+app.get('/reg.html', function(req,res){
+	res.sendFile(__dirname+'/reg.html', function(){res.end();})
+})
 
 setInterval(function(){
 	var month = new Date().getMonth()+1;
@@ -148,7 +151,11 @@ io.sockets.on('connection', function(socket){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
 			db.collection('users').find({"username": username}).count(function(err, cnt){
 				if(cnt){
-					socket.emit('username2')
+					socket.emit('username2');
+				}
+				else{
+					db.collection('users').insert({"username": username, "pass": pass});
+					socket.emit('regdone');
 				}
 			})
 		})
