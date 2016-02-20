@@ -12,7 +12,7 @@
 		<option value="tag">tag</option>
 	</select>
 	<input type="button" value="find" id="find">
-	<input type="button" value="edit" id="edit">
+	<input type="button" value="edit(delete)" id="edit">
 	<div id="appe0"></div>
 </body>
 </html>
@@ -51,9 +51,5 @@
 	})
 	socket.on('allisthis',function(come){
 			$('#appe0').append('<p id="count'+count+'">'+come+'<p>')
-			/*for(var loop=0; loop<come.length; loop++){
-				$('#appe0').append('<p id="count'+count+'">'+come[loop]+'<p>')
-
-			}*/
 	})
 </script>

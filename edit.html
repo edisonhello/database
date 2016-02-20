@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>View</title>
+	<title>Edit(Delete)</title>
 </head>
 <body>
 	insert id to find data: <input type="text" id="getid"><br>
 
 	title: <input type="text" id="title"><br>
 	description: <input type="text" id="description" style="height:100px"><br>
-	tags: <input type="tags"id="tag"><br>
-	<input type="button" value="update" id="update">
+	tags: <input type="tags"id="tag"><br><br>
+	<input type="button" value="update" id="update"><br><br>
+	<input type="checkbox" id="deleteconfirm"> confirm delete <input type="button" value="delete" id="delete"><br><br>
 	<input type="button" value="back to home" id="back">
 </body>
 </html>
@@ -45,6 +46,10 @@
 			var tag = tags.split(" ")
 			var updatethisid = document.getElementById('getid').value
 			socket.emit('updateitem', title, descr, tag, updatethisid)
+		})
+		document.getElementById('delete').addEventListener('click', function(){
+			var really = document.getElementById('deleteconfirm').checked
+			console.log(really)
 		})
 	})
 
