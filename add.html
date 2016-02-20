@@ -5,11 +5,14 @@
 </head>
 <body>
 
+	<div id="wrn"></div>
 	<div id="login">
 		username : <input type="text" id="username"><br>
 		password : <input type="password" id="pass"><br>
 		<input type="button" id="login!" value="login">
 	</div>
+
+	<br><br><br>
 
 	title: <input type="text" id="title"><br>
 	description: <input type="text" id="description" style="height:100px"><br>
@@ -41,6 +44,25 @@
 		document.getElementById('back').addEventListener('click', function(){
 			window.location='http://localhost:7122'
 		})
-		document.getElementById('login!').addEventListener('')
+		document.getElementById('login!').addEventListener('click', function(){
+			var usernam = document.getElementById('username').value
+			var passw = document.getElementById('pass').value
+			if(usernam == "" || passw == ""){
+				$('#wrn').text("invalid login")
+			}
+			else{
+				socket.emit('loginreq', usernam, passw)
+			}
+		})
 	})
+////////////////no test
+	socket.on('logindone', function(){
+		$('#wrn').text("successful login!")
+		$('#login').remove()
+		logined = true
+	})
+	socket.on('loginfail', function(){
+		$('#wrn').text("username or password wrong!")
+	})
+////////////////////////
 </script>

@@ -143,6 +143,29 @@ io.sockets.on('connection', function(socket){
 			db.collection('datbs').remove({"id": thisid.toString()});
 		})
 	})
+
+	socket.on('regreq', function(username, pass){
+		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
+			db.collection('users').find({"username": username}).count(function(err, cnt){
+				if(cnt){
+					socket.emit('username2')
+				}
+			})
+		})
+	})
+
+	socket.on('loginreq', function(username, pass){
+		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
+			db.collection('users').find({"username": username, "pass": pass}).count(function(err, cnt){
+				if(cnt){
+					socket.emit('logindone');
+				}
+				else{
+					socket.emit('loginfail');
+				}
+			})
+		})
+	})
 })
 
 

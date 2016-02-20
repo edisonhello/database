@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Reg</title>
+</head>
+<body>
+
+	<div id="wrn"></div>
+	<div id="login">
+		username : <input type="text" id="username"><br>
+		password : <input type="password" id="pass"><br>
+		confirm password : <input type="password" id="passconfirm">
+		<input type="button" id="reg!" value="regist">
+	</div>
+</body>
+</html>
+
+<script src="/static/jQuery/jquery-2.1.4.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/static/jQuery/url.min.js"></script>
+<script type="text/javascript">
+	var socket = io('http://localhost:7122')
+
+	var logined = false
+
+	window.addEventListener('load',function(){
+		document.getElementById('reg!').addEventListener('click', function(){
+			var usernam = document.getElementById('username').value
+			var passw = document.getElementById('pass').value
+			var pass2 = document.getElementById('passconfirm').value
+			document.getElementById('pass').value = ""
+			document.getElementById('passconfirm').value = ""
+			if(usernam == "" || passw == "" || pass2 == ""){
+				$('#wrn').text("please fill all blocks")
+			}
+			else{
+				socket.emit('regreq', usernam, passw)
+			}
+		})
+	})
+
+	socket.on('username2', function(){
+		$('#wrn').text("")////<<<-----
+	})
+</script>
