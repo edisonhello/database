@@ -12,7 +12,7 @@
 		<input type="button" id="login!" value="login">
 	</div>
 
-	<br><br><br>
+	<br>
 
 	title: <input type="text" id="title"><br>
 	description: <input type="text" id="description" style="height:100px"><br>
@@ -30,16 +30,24 @@
 
 	var logined = false
 
+	var whoami
+
 	window.addEventListener('load',function(){
 		document.getElementById('add').addEventListener('click', function(){
 			var title = document.getElementById('title').value
 			var descr = document.getElementById('description').value
 			var tags = document.getElementById('tag').value
 			var tag = tags.split(" ")
-			socket.emit('additem', title, descr, tag)
-			document.getElementById('title').value = ''
-			document.getElementById('description').value = ''
-			document.getElementById('tag').value = ''
+			if(logined){
+				socket.emit('additem', title, descr, tag, whoami)
+				document.getElementById('title').value = ''
+				document.getElementById('description').value = ''
+				document.getElementById('tag').value = ''
+				$('#wrn').text("add done!")
+			}
+			else{
+				$('#wrn').text('login first!')
+			}
 		})
 		document.getElementById('back').addEventListener('click', function(){
 			window.location='http://localhost:7122'
@@ -56,10 +64,11 @@
 		})
 	})
 ////////////////no test
-	socket.on('logindone', function(){
+	socket.on('logindone', function(username){
 		$('#wrn').text("successful login!")
 		$('#login').remove()
 		logined = true
+		whoami = username
 	})
 	socket.on('loginfail', function(){
 		$('#wrn').text("username or password wrong!")

@@ -57,7 +57,7 @@ setInterval(function(){
 
 var count;
 MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
-	db.collection('datbs').find({}).count(function(err,cnt){
+	db.collection('counting').find({}).count(function(err,cnt){
 		count = cnt;
 	})
 })
@@ -65,7 +65,7 @@ MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
 io.sockets.on('connection', function(socket){
 	socket.on('reqall', function(){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
-			db.collection('datbs').find({},{_id: 0}, function(err,result){
+			db.collection('datbs').find({},{_id: 0, creater: 0}, function(err,result){
 				result.toArray(function(err, callback){
 					var str = JSON.stringify(callback);
 					str = str.split("},{");
@@ -80,17 +80,18 @@ io.sockets.on('connection', function(socket){
 		})
 	})
 
-	socket.on('additem', function(title, descr, tag){
+	socket.on('additem', function(title, descr, tag, creater){
 		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
 			count++;
-			db.collection('datbs').insert({"id": count.toString(), "time": now, "title": title, "descr": descr, "tag": tag});
+			db.collection('datbs').insert({"id": count.toString(), "time": now, "title": title, "descr": descr, "tag": tag, "creater": creater});
+			db.collection('counting').insert({});
 		})
 	})
 
 	socket.on('findreq', function(findType, findThing){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
 			if(findType == "title"){
-				db.collection('datbs').find({"title":findThing},{_id: 0}, function(err,result){
+				db.collection('datbs').find({"title":findThing},{_id: 0, creater: 0}, function(err,result){
 					result.toArray(function(err, callback){
 						var str = JSON.stringify(callback)
 						str = str.split("},{");
@@ -103,7 +104,7 @@ io.sockets.on('connection', function(socket){
 				})
 			}
 			if(findType == "tag"){
-				db.collection('datbs').find({"tag": findThing},{_id: 0}, function(err,result){
+				db.collection('datbs').find({"tag": findThing},{_id: 0, creater: 0}, function(err,result){
 					result.toArray(function(err, callback){
 						var str = JSON.stringify(callback);
 						str = str.split("},{");
@@ -120,8 +121,8 @@ io.sockets.on('connection', function(socket){
 
 	socket.on('thisiddetail?', function(id){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
-			db.collection('datbs').find({"id": id}, function(err, result){
-				db.collection('datbs').find({"id": id}).count(function(err, cnt){
+			db.collection('datbs').find({"id": id, creater: 0}, function(err, result){
+				db.collection('datbs').find({"id": id, creater: 0}).count(function(err, cnt){
 					if(cnt){
 						result.toArray(function(err, callback){
 							socket.emit('thisisdetail', callback[0].title, callback[0].descr, callback[0].tag);
@@ -165,7 +166,7 @@ io.sockets.on('connection', function(socket){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
 			db.collection('users').find({"username": username, "pass": pass}).count(function(err, cnt){
 				if(cnt){
-					socket.emit('logindone');
+					socket.emit('logindone', username);
 				}
 				else{
 					socket.emit('loginfail');
