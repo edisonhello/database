@@ -24,8 +24,12 @@
 
 	setInterval(function(){
 		if(nowId != document.getElementById('getid').value){
-			console.log(11)
 			nowId = document.getElementById('getid').value
+			if(nowId == 0){
+				document.getElementById('title').value = ""
+				document.getElementById('description').value = ""
+				document.getElementById('tag').value = ""
+			}
 			socket.emit('thisiddetail?', nowId)
 		}
 	},100)
@@ -42,12 +46,29 @@
 		document.getElementById('back').addEventListener('click', function(){
 			window.location='http://localhost:7122'
 		})
+		document.getElementById('update').addEventListener('click', function(){
+			var title = document.getElementById('title').value
+			var descr = document.getElementById('description').value
+			var tags = document.getElementById('tag').value
+			var tag = tags.split(" ")
+			var updatethisid = document.getElementById('getid').value
+			socket.emit('updateitem', title, descr, tag, updatethisid)
+		})
 	})
 
 	socket.on('thisisdetail', function(title, descr, tagArray){
-		console.log(title)
+		console.log()
 
-		//var tagString = tagArray.toString()
-		//console.log(tagString)
+		var tagString = tagArray.toString()
+		tagString = tagString.replace(/,/g,' ')
+		document.getElementById('title').value = title
+		document.getElementById('description').value = descr
+		document.getElementById('tag').value = tagString
+	})
+
+	socket.on('thisidnull', function(){
+		document.getElementById('title').value = "nothing here!"
+		document.getElementById('description').value = ""
+		document.getElementById('tag').value = "		"
 	})
 </script>
