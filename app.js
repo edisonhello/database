@@ -80,6 +80,7 @@ io.sockets.on('connection', function(socket){
 	socket.on('additem', function(title, descr, tag){
 		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
 			count++;
+			console.log("321ads321ads321asd");
 			db.collection('datbs').insert({"id": count.toString(), "time": now, "title": title, "descr": descr, "tag": tag});
 		})
 	})

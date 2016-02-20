@@ -35,14 +35,6 @@
 	},100)
 
 	window.addEventListener('load',function(){
-		document.getElementById('update').addEventListener('click', function(){
-			/**//**//**//**//**/
-			var title = document.getElementById('title').value
-			var descr = document.getElementById('description').value
-			var tags = document.getElementById('tag').value
-			var tag = tags.split(" ")
-			socket.emit('additem', title, descr, tag)
-		})
 		document.getElementById('back').addEventListener('click', function(){
 			window.location='http://localhost:7122'
 		})
@@ -69,6 +61,6 @@
 	socket.on('thisidnull', function(){
 		document.getElementById('title').value = "nothing here!"
 		document.getElementById('description').value = ""
-		document.getElementById('tag').value = "		"
+		document.getElementById('tag').value = ""
 	})
 </script>
