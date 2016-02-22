@@ -39,7 +39,6 @@
 	setInterval(function(){
 		if(nowId != document.getElementById('getid').value){
 			if(logined){
-				console.log('s')
 				nowId = document.getElementById('getid').value
 				if(nowId == 0){
 					document.getElementById('title').value = ""
@@ -68,7 +67,7 @@
 				socket.emit('updateitem', title, descr, tag, updatethisid)
 			}
 			else{
-				$('#wrn').text('you cannot edit this!')
+				alert('you cannot edit this!')
 			}
 		})
 		document.getElementById('delete').addEventListener('click', function(){
@@ -86,7 +85,7 @@
 				}
 			}
 			else{
-				$('#wrn').text('you cannot delete this!')
+				alert('you cannot delete this!')
 			}
 		})
 		document.getElementById('login!').addEventListener('click', function(){
@@ -102,7 +101,6 @@
 	})
 
 	socket.on('thisisdetail', function(title, descr, tagArray, creater){
-		console.log('qwe')
 		var tagString = tagArray.toString()
 		tagString = tagString.replace(/,/g,' ')
 		document.getElementById('title').value = title

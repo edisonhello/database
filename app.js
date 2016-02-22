@@ -125,7 +125,6 @@ io.sockets.on('connection', function(socket){
 				db.collection('datbs').find({"id": id}).count(function(err, cnt){
 					if(cnt){
 						result.toArray(function(err, callback){
-							console.log(callback[0].creater)
 							socket.emit('thisisdetail', callback[0].title, callback[0].descr, callback[0].tag, callback[0].creater);
 						})
 					}
