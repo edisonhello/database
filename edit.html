@@ -4,6 +4,15 @@
 	<title>Edit(Delete)</title>
 </head>
 <body>
+	<div id="wrn"></div>
+	<div id="login">
+		username : <input type="text" id="username"><br>
+		password : <input type="password" id="pass"><br>
+		<input type="button" id="login!" value="login">
+	</div>
+
+	<br>
+
 	insert id to find data: <input type="text" id="getid"><br>
 
 	title: <input type="text" id="title"><br>
@@ -23,15 +32,25 @@
 
 	var nowId
 
+	var whoami
+	var logined = false
+	var thiscreater
+
 	setInterval(function(){
 		if(nowId != document.getElementById('getid').value){
-			nowId = document.getElementById('getid').value
-			if(nowId == 0){
-				document.getElementById('title').value = ""
-				document.getElementById('description').value = ""
-				document.getElementById('tag').value = ""
+			if(logined){
+				console.log('s')
+				nowId = document.getElementById('getid').value
+				if(nowId == 0){
+					document.getElementById('title').value = ""
+					document.getElementById('description').value = ""
+					document.getElementById('tag').value = ""
+				}
+				socket.emit('thisiddetail?', nowId)
 			}
-			socket.emit('thisiddetail?', nowId)
+			else{
+				$('#wrn').text('login first!')
+			}
 		}
 	},100)
 
@@ -40,39 +59,71 @@
 			window.location='http://localhost:7122'
 		})
 		document.getElementById('update').addEventListener('click', function(){
-			var title = document.getElementById('title').value
-			var descr = document.getElementById('description').value
-			var tags = document.getElementById('tag').value
-			var tag = tags.split(" ")
-			var updatethisid = document.getElementById('getid').value
-			socket.emit('updateitem', title, descr, tag, updatethisid)
-		})
-		document.getElementById('delete').addEventListener('click', function(){
-			var really = document.getElementById('deleteconfirm').checked
-			if(really == true){
-				var deleteid = document.getElementById('getid').value
-				socket.emit('deletethis', deleteid)
-				document.getElementById('title').value = "nothing here!"
-				document.getElementById('description').value = ""
-				document.getElementById('tag').value = ""
+			if(whoami == thiscreater){
+				var title = document.getElementById('title').value
+				var descr = document.getElementById('description').value
+				var tags = document.getElementById('tag').value
+				var tag = tags.split(" ")
+				var updatethisid = document.getElementById('getid').value
+				socket.emit('updateitem', title, descr, tag, updatethisid)
 			}
 			else{
-				alert('really want to delete??')
+				$('#wrn').text('you cannot edit this!')
+			}
+		})
+		document.getElementById('delete').addEventListener('click', function(){
+			if(whoami == thiscreater){
+				var really = document.getElementById('deleteconfirm').checked
+				if(really == true){
+					var deleteid = document.getElementById('getid').value
+					socket.emit('deletethis', deleteid)
+					document.getElementById('title').value = "nothing here!"
+					document.getElementById('description').value = ""
+					document.getElementById('tag').value = ""
+				}
+				else{
+					alert('really want to delete??')
+				}
+			}
+			else{
+				$('#wrn').text('you cannot delete this!')
+			}
+		})
+		document.getElementById('login!').addEventListener('click', function(){
+			var usernam = document.getElementById('username').value
+			var passw = document.getElementById('pass').value
+			if(usernam == "" || passw == ""){
+				$('#wrn').text("invalid login")
+			}
+			else{
+				socket.emit('loginreq', usernam, passw)
 			}
 		})
 	})
 
-	socket.on('thisisdetail', function(title, descr, tagArray){
+	socket.on('thisisdetail', function(title, descr, tagArray, creater){
+		console.log('qwe')
 		var tagString = tagArray.toString()
 		tagString = tagString.replace(/,/g,' ')
 		document.getElementById('title').value = title
 		document.getElementById('description').value = descr
 		document.getElementById('tag').value = tagString
+		thiscreater = creater
 	})
 
 	socket.on('thisidnull', function(){
 		document.getElementById('title').value = "nothing here!"
 		document.getElementById('description').value = ""
 		document.getElementById('tag').value = ""
+	})
+
+	socket.on('logindone', function(username){
+		$('#wrn').text("successful login!")
+		$('#login').remove()
+		logined = true
+		whoami = username
+	})
+	socket.on('loginfail', function(){
+		$('#wrn').text("username or password wrong!")
 	})
 </script>

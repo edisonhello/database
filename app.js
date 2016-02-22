@@ -121,11 +121,12 @@ io.sockets.on('connection', function(socket){
 
 	socket.on('thisiddetail?', function(id){
 		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
-			db.collection('datbs').find({"id": id, creater: 0}, function(err, result){
-				db.collection('datbs').find({"id": id, creater: 0}).count(function(err, cnt){
+			db.collection('datbs').find({"id": id}, function(err, result){
+				db.collection('datbs').find({"id": id}).count(function(err, cnt){
 					if(cnt){
 						result.toArray(function(err, callback){
-							socket.emit('thisisdetail', callback[0].title, callback[0].descr, callback[0].tag);
+							console.log(callback[0].creater)
+							socket.emit('thisisdetail', callback[0].title, callback[0].descr, callback[0].tag, callback[0].creater);
 						})
 					}
 					else{
