@@ -19,7 +19,8 @@
 	description: <input type="text" id="description" style="height:100px"><br>
 	tags: <input type="tags"id="tag"><br><br>
 	<input type="button" value="update" id="update"><br><br>
-	<input type="checkbox" id="deleteconfirm"> confirm delete <input type="button" value="delete" id="delete"><br><br>
+	<input type="checkbox" id="deleteconfirm"> confirm delete <input type="button" value="delete" id="delete">
+	<input type="button" value="log out" id="out"><br><br>
 	<input type="button" value="back to home" id="back">
 </body>
 </html>
@@ -98,6 +99,10 @@
 			else{
 				socket.emit('loginreq', usernam, passw)
 			}
+		})
+		document.getElementById('out').addEventListener('click', function(){
+			document.cookie = ""
+			location.reload(true)
 		})
 	})
 
