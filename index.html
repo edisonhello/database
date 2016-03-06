@@ -23,7 +23,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="/static/jQuery/url.min.js"></script>
 <script type="text/javascript">
-	var socket = io('http://188.166.216.86:7122')
+	var socket = io('http://tdcweb.xyz:7122')
 	var count = 0
 	window.addEventListener('load',function(){
 		document.getElementById('show').addEventListener('click', function(){
@@ -31,7 +31,7 @@
 			socket.emit('reqall')
 		})
 		document.getElementById('new').addEventListener('click', function(){
-			window.location = 'http://188.166.216.86:7122/add.html'
+			window.location = 'http://tdcweb.xyz:7122/add.html'
 		})
 		document.getElementById('find').addEventListener('click', function(){
 			var findThing = document.getElementById('findIndex').value
@@ -47,10 +47,10 @@
 			}
 		})
 		document.getElementById('edit').addEventListener('click', function(){
-			window.location = 'http://188.166.216.86:7122/edit.html'
+			window.location = 'http://tdcweb.xyz:7122/edit.html'
 		})
 		document.getElementById('reg').addEventListener('click', function(){
-			window.location = 'http://188.166.216.86:7122/reg.html'
+			window.location = 'http://tdcweb.xyz:7122/reg.html'
 		})
 	})
 	socket.on('allisthis',function(come){
