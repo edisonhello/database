@@ -18,7 +18,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="/static/jQuery/url.min.js"></script>
 <script type="text/javascript">
-	var socket = io('http://localhost:7122')
+	var socket = io('http://188.166.216.86:7122')
 
 	var logined = false
 
@@ -40,7 +40,7 @@
 			}
 		})
 		document.getElementById('gohome').addEventListener('click', function(){
-			window.location = 'http://localhost:7122/'
+			window.location = 'http://188.166.216.86:7122/'
 		})
 	})
 
@@ -52,7 +52,7 @@
 		$('#wrn').text("regist finish. return to homepage in 5 seconds")
 		document.getElementById('username').value = ""
 		setTimeout(function(){
-			window.location = 'http://localhost:7122/'
+			window.location = 'http://188.166.216.86:7122/'
 		}, 5000);
 	})
 </script>

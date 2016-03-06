@@ -56,7 +56,7 @@ setInterval(function(){
 }, 1000)
 
 var count;
-MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
+MongoClient.connect('mongodb://188.166.216.86:27017/datbs', function(err, db){
 	db.collection('counting').find({}).count(function(err,cnt){
 		count = cnt;
 	})
@@ -64,7 +64,7 @@ MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
 
 io.sockets.on('connection', function(socket){
 	socket.on('reqall', function(){
-		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
+		MongoClient.connect('mongodb://188.166.216.86:27017/datbs', function(err, db){
 			db.collection('datbs').find({},{_id: 0, creater: 0}, function(err,result){
 				result.toArray(function(err, callback){
 					var str = JSON.stringify(callback);
@@ -81,7 +81,7 @@ io.sockets.on('connection', function(socket){
 	})
 
 	socket.on('additem', function(title, descr, tag, creater, crpw){
-		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
+		MongoClient.connect('mongodb://188.166.216.86:27017/datbs',function(err,db){
 			db.collection('users').find({"username":creater, "pass":crpw}).count(function(err,cnt){
 				if(cnt == 0){
 					socket.emit('noperadd');
@@ -98,7 +98,7 @@ io.sockets.on('connection', function(socket){
 	})
 
 	socket.on('findreq', function(findType, findThing){
-		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
+		MongoClient.connect('mongodb://188.166.216.86:27017/datbs', function(err,db){
 			if(findType == "title"){
 				db.collection('datbs').find({"title":findThing},{_id: 0, creater: 0}, function(err,result){
 					result.toArray(function(err, callback){
@@ -142,7 +142,7 @@ io.sockets.on('connection', function(socket){
 	})
 
 	socket.on('thisiddetail?', function(id){
-		MongoClient.connect('mongodb://localhost:27017/datbs', function(err, db){
+		MongoClient.connect('mongodb://188.166.216.86:27017/datbs', function(err, db){
 			db.collection('datbs').find({"id": id}, function(err, result){
 				db.collection('datbs').find({"id": id}).count(function(err, cnt){
 					if(cnt){
@@ -159,8 +159,8 @@ io.sockets.on('connection', function(socket){
 	})
 
 	socket.on('updateitem', function(title, descr, tag, thisid, thispw){
-		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
-			db.collection('users').find("username":thisid , "pass":thispw).count(function(err, cnt){
+		MongoClient.connect('mongodb://188.166.216.86:27017/datbs',function(err,db){
+			db.collection('users').find({"username":thisid , "pass":thispw}).count(function(err, cnt){
 				if(cnt == 0){
 					socket.emit('noperedit');
 				}
@@ -171,9 +171,9 @@ io.sockets.on('connection', function(socket){
 		})
 	})
 
-	socket.on('deletethis', function(thisid, thisid, thispw){
-		MongoClient.connect('mongodb://localhost:27017/datbs',function(err,db){
-			db.collection('users').find("username":thisid , "pass":thispw).count(function(err, cnt){
+	socket.on('deletethis', function(thisid, thisuser, thispw){
+		MongoClient.connect('mongodb://188.166.216.86:27017/datbs',function(err,db){
+			db.collection('users').find({"username":thisuser , "pass":thispw}).count(function(err, cnt){
 				if(cnt == 0){
 					socket.emit('noperdel');
 				}
@@ -185,7 +185,7 @@ io.sockets.on('connection', function(socket){
 	})
 
 	socket.on('regreq', function(username, pass){
-		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
+		MongoClient.connect('mongodb://188.166.216.86:27017/datbs', function(err,db){
 			db.collection('users').find({"username": username}).count(function(err, cnt){
 				if(cnt){
 					socket.emit('username2');
@@ -199,7 +199,7 @@ io.sockets.on('connection', function(socket){
 	})
 
 	socket.on('loginreq', function(username, pass){
-		MongoClient.connect('mongodb://localhost:27017/datbs', function(err,db){
+		MongoClient.connect('mongodb://188.166.216.86:27017/datbs', function(err,db){
 			db.collection('users').find({"username": username, "pass": pass}).count(function(err, cnt){
 				if(cnt){
 					socket.emit('logindone', username, pass);
