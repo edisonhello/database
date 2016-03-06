@@ -166,7 +166,7 @@ io.sockets.on('connection', function(socket){
 		MongoClient.connect('mongodb://188.166.216.86:27017/datbs',function(err,db){
 			db.collection('users').find("username":thisid , "pass":thispw).count(function(err, cnt){
 				if(cnt == 0){
-					socket.emit('noperedit');
+					socket.emit('noperdel');
 				}
 				else{
 					db.collection('datbs').remove({"id": thisid.toString()});

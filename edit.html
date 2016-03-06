@@ -131,5 +131,21 @@
 	socket.on('noperedit', function(){
 		alert("jizz");
 	})
-	
+	socket.on('noperdel', function(){
+		alert("jizz");
+		if(nowId != document.getElementById('getid').value){
+			if(logined){
+				nowId = document.getElementById('getid').value
+				if(nowId == 0){
+					document.getElementById('title').value = ""
+					document.getElementById('description').value = ""
+					document.getElementById('tag').value = ""
+				}
+				socket.emit('thisiddetail?', nowId)
+			}
+			else{
+				$('#wrn').text('login first!')
+			}
+		}
+	})
 </script>
