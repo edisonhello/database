@@ -15,6 +15,7 @@
 	<input type="button" value="find" id="find">
 	<input type="button" value="edit(delete)" id="edit">
 	<input type="button" value="register" id="reg">
+	<input type="button" value="log out" id="out">
 	<div id="appe0"></div>
 </body>
 </html>
@@ -51,6 +52,9 @@
 		})
 		document.getElementById('reg').addEventListener('click', function(){
 			window.location = 'http://tdcweb.xyz:7122/reg.html'
+		})
+		document.getElementById('out').addEventListener('click', function(){
+			document.cookie = ""
 		})
 	})
 	socket.on('allisthis',function(come){
