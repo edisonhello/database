@@ -80,11 +80,20 @@ io.sockets.on('connection', function(socket){
 		})
 	})
 
-	socket.on('additem', function(title, descr, tag, creater){
+	socket.on('additem', function(title, descr, tag, creater, crpw){
 		MongoClient.connect('mongodb://188.166.216.86:27017/datbs',function(err,db){
-			count++;
-			db.collection('datbs').insert({"id": count.toString(), "time": now, "title": title, "descr": descr, "tag": tag, "creater": creater});
-			db.collection('counting').insert({});
+			db.collection('users').find({"username":creater, "pass":crpw}).count(function(err,cnt){
+				if(cnt == 0){
+					socket.emit('noperadd');
+				}
+				else{
+					count++;
+					db.collection('datbs').insert({"id": count.toString(), "time": now, "title": title, "descr": descr, "tag": tag, "creater": creater});
+					db.collection('counting').insert({});
+				}
+			})
+
+			
 		})
 	})
 

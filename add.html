@@ -31,6 +31,7 @@
 	var logined = false
 
 	var whoami
+	var pw
 
 	window.addEventListener('load',function(){
 		document.getElementById('add').addEventListener('click', function(){
@@ -39,7 +40,7 @@
 			var tags = document.getElementById('tag').value
 			var tag = tags.split(" ")
 			if(logined){
-				socket.emit('additem', title, descr, tag, whoami)
+				socket.emit('additem', title, descr, tag, whoami, pw)
 				document.getElementById('title').value = ''
 				document.getElementById('description').value = ''
 				document.getElementById('tag').value = ''
@@ -63,15 +64,19 @@
 			}
 		})
 	})
-////////////////no test
-	socket.on('logindone', function(username){
+
+	socket.on('logindone', function(username, passwordd){
 		$('#wrn').text("successful login!")
 		$('#login').remove()
 		logined = true
 		whoami = username
+		pw = passwordd
 	})
 	socket.on('loginfail', function(){
 		$('#wrn').text("username or password wrong!")
 	})
-////////////////////////
+
+	socket.on('noperadd', function(){
+		alert("jizz");
+	})
 </script>
