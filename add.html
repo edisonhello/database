@@ -3,7 +3,7 @@
 <head>
 	<title>addNew</title>
 </head>
-<body>
+<body onload="checkCookie()">
 
 	<div id="wrn"></div>
 	<div id="login">
@@ -71,6 +71,10 @@
 		logined = true
 		whoami = username
 		pw = passwordd
+
+		var nowdate = new Date()
+		nowdate.setDate(nowdate.getDate()+ 3)
+		document.cookie = "username="+username+";pass="+pass+";expire"+nowdate.toGMTString()
 	})
 	socket.on('loginfail', function(){
 		$('#wrn').text("username or password wrong!")
@@ -79,4 +83,33 @@
 	socket.on('noperadd', function(){
 		alert("jizz");
 	})
+
+	function checkCookie(){
+		whoami = getCookie('username')
+		if(whoami != null && whoami != ""){
+			myPw = getCookie('pass')
+			$('#login').remove()
+			logined = true
+		}
+	}
+
+	function getCookie(what){
+		if(document.cookie.length==0){
+			return ""
+		}
+		else{
+			var start = document.cookie.indexOf(what+"=")
+			if(start != -1){
+				start = start + what.length+1
+				var end = document.cookie.indexOf(";",start)
+				if(end == -1){
+					end = document.cookie.length
+				}
+				return unescape(document.cookie.substring(start,end))
+			}
+			else{
+				return ""
+			}
+		}
+	}
 </script>

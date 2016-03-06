@@ -3,7 +3,7 @@
 <head>
 	<title>Edit(Delete)</title>
 </head>
-<body>
+<body onload="checkCookie()">
 	<div id="wrn"></div>
 	<div id="login">
 		username : <input type="text" id="username"><br>
@@ -31,7 +31,6 @@
 	var socket = io('http://188.166.216.86:7122')
 
 	var nowId
-	
 
 	var whoami
 	var myPw
@@ -123,6 +122,10 @@
 		logined = true
 		whoami = username
 		myPw = password
+
+		var nowdate = new Date()
+		nowdate.setDate(nowdate.getDate()+ 3)
+		document.cookie = "username="+username+";pass="+pass+";expire"+nowdate.toGMTString()
 	})
 	socket.on('loginfail', function(){
 		$('#wrn').text("username or password wrong!")
@@ -148,4 +151,33 @@
 			}
 		}
 	})
+
+	function checkCookie(){
+		whoami = getCookie('username')
+		if(whoami != null && whoami != ""){
+			myPw = getCookie('pass')
+			$('#login').remove()
+			logined = true
+		}
+	}
+
+	function getCookie(what){
+		if(document.cookie.length==0){
+			return ""
+		}
+		else{
+			var start = document.cookie.indexOf(what+"=")
+			if(start != -1){
+				start = start + what.length+1
+				var end = document.cookie.indexOf(";",start)
+				if(end == -1){
+					end = document.cookie.length
+				}
+				return unescape(document.cookie.substring(start,end))
+			}
+			else{
+				return ""
+			}
+		}
+	}
 </script>
