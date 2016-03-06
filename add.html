@@ -91,7 +91,7 @@
 
 	function checkCookie(){
 		whoami = getCookie('username')
-		if(whoami != null && whoami != ""){
+		if(whoami != null && whoami != "" && document.cookie != ""){
 			myPw = getCookie('pass')
 			$('#login').remove()
 			logined = true
